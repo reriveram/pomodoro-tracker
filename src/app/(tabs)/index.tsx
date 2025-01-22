@@ -1,14 +1,12 @@
-import { StyleSheet } from "react-native";
-
 import { Text, View } from "@/src/components/Themed";
 import EditScreenInfo from "@/src/components/EditScreenInfo";
 
 export default function TabOneScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+    <View className="flex-1 items-center justify-center">
+      <Text className="text-xl font-bold">Tab One</Text>
       <View
-        style={styles.separator}
+        className="h-[1px] w-4/5 my-8"
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
@@ -16,20 +14,3 @@ export default function TabOneScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
