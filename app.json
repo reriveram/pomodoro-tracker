@@ -32,6 +32,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "cb254ae4-dda9-4b3f-80e7-af5b8a519722"
+      }
+    },
+    "owner": "rodriesteban12"
   }
 }
