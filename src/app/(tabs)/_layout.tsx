@@ -16,26 +16,16 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      screenOptions={
-        {
-          // tabBarActiveTintColor: Colors[theme].tint,
-          // Disable the static render of the header on web
-          // to prevent a hydration error in React Navigation v6.
-        }
-      }
+      screenOptions={{
+        tabBarStyle: { display: "none" },
+      }}
     >
       <Tabs.Screen
         name="index"
         options={{
+          headerShown: false,
           title: "Pomodoro",
           headerStyle: { backgroundColor: "black" },
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: "Tab Two",
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
