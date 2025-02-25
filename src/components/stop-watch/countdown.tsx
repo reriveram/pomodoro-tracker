@@ -1,5 +1,5 @@
 import { View, Text, Pressable } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import useCountdown from "./hooks/use-countdown";
 
 const Countdown = () => {
