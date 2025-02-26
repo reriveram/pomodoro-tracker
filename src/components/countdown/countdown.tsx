@@ -5,6 +5,7 @@ import { getTextColor } from "@/components/countdown/utils";
 import { CircularProgress } from "@/components/circular-progress";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const Countdown = () => {
   const focusTime = 3;
@@ -37,9 +38,10 @@ const Countdown = () => {
           )}
         </View>
       </CircularProgress>
-      <Pressable onPress={reset} className="bg-white p-2 rounded-md">
-        <Text className="text-black">Reset</Text>
-      </Pressable>
+      <View className="flex-row items-center justify-between">
+        <Entypo onPress={reset} name="back-in-time" size={40} color="white" />
+        <Ionicons name="settings" size={40} color="white" />
+      </View>
     </View>
   );
 };
