@@ -1,15 +1,16 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
 import useCountdown from "./hooks/use-countdown";
-import { Cycle, getTextColor } from "@/components/countdown/utils";
+import { getTextColor } from "@/components/countdown/utils";
+import { CircularProgress } from "@/components/circular-progress";
 
 const Countdown = () => {
-  const initialTime = 3;
+  const focusTime = 3;
   const breakTime = 2;
 
-  const { formattedTimeLeft, isRunning, cycle, startStop, reset } =
+  const { progress, formattedTimeLeft, isRunning, cycle, startStop, reset } =
     useCountdown({
-      focusTime: initialTime,
+      focusTime,
       breakTime,
     });
 
@@ -24,6 +25,7 @@ const Countdown = () => {
       <Pressable onPress={reset} className="bg-white p-2 rounded-md">
         <Text className="text-black">Reset</Text>
       </Pressable>
+      <CircularProgress progress={progress} />
     </View>
   );
 };

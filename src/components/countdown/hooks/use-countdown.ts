@@ -14,10 +14,17 @@ const useCountdown = ({ focusTime, breakTime }: IUserCountdownprops) => {
   const formattedFocusTime = convertTimeToFormat(focusTime);
   const formattedBreakTime = convertTimeToFormat(breakTime);
 
+  const [progress, setProgress] = useState(0);
+  const focusTimeInSeconds = focusTime * 60;
+  const breakTimeInSeconds = breakTime * 60;
+
   const [timeLeft, setTimeLeft] = useState(formattedFocusTime);
   const [cycle, setCycle] = useState<Cycle>(Cycle.READY);
   const [isRunning, setIsRunning] = useState(false);
   const timerInterval = useRef<NodeJS.Timeout | null>(null);
+
+  const refTime =
+    cycle === Cycle.FOCUS ? focusTimeInSeconds : breakTimeInSeconds;
 
   const startStop = () => {
     if (cycle === Cycle.READY) {
@@ -62,6 +69,7 @@ const useCountdown = ({ focusTime, breakTime }: IUserCountdownprops) => {
               seconds: prevTime.seconds - 1,
             };
           });
+          setProgress((prevProgress) => prevProgress + 1 / refTime);
         }, 1000);
       }
     }
@@ -75,7 +83,15 @@ const useCountdown = ({ focusTime, breakTime }: IUserCountdownprops) => {
 
   const formattedTimeLeft = getFormattedTimeLeft(timeLeft);
 
-  return { formattedTimeLeft, isRunning, cycle, startStop, reset };
+  return {
+    cycle,
+    progress,
+    timeLeft,
+    isRunning,
+    formattedTimeLeft,
+    reset,
+    startStop,
+  };
 };
 
 export default useCountdown;
