@@ -1,4 +1,4 @@
-import { Countdown } from "@/components/stop-watch";
+import { Countdown } from "@/components/countdown";
 import { View } from "react-native";
 
 export default function TabOneScreen() {
