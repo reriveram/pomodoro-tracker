@@ -7,15 +7,16 @@ const Countdown = () => {
   const initialTime = 3;
   const breakTime = 2;
 
-  const { time, isRunning, cycle, startStop, reset } = useCountdown({
-    focusTime: initialTime,
-    breakTime,
-  });
+  const { formattedTimeLeft, isRunning, cycle, startStop, reset } =
+    useCountdown({
+      focusTime: initialTime,
+      breakTime,
+    });
 
   return (
     <View>
       <Text className={`text-white text-8xl font-bold ${getTextColor(cycle)}`}>
-        {time}
+        {formattedTimeLeft}
       </Text>
       <Pressable onPress={startStop} className="bg-white p-2 rounded-md">
         <Text className="text-black">{isRunning ? "Pause" : "Start"}</Text>

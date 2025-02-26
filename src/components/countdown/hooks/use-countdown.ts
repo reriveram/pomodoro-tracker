@@ -1,15 +1,23 @@
-import { useEffect, useState } from "react";
-import { Cycle } from "@/components/countdown/utils";
+import { useEffect, useRef, useState } from "react";
+import {
+  convertTimeToFormat,
+  Cycle,
+  getFormattedTimeLeft,
+} from "@/components/countdown/utils";
 
 interface IUserCountdownprops {
-  focusTime: number;
-  breakTime: number;
+  focusTime: number; // time in minutes
+  breakTime: number; // time in minutes
 }
 
 const useCountdown = ({ focusTime, breakTime }: IUserCountdownprops) => {
-  const [time, setTime] = useState(focusTime);
+  const formattedFocusTime = convertTimeToFormat(focusTime);
+  const formattedBreakTime = convertTimeToFormat(breakTime);
+
+  const [timeLeft, setTimeLeft] = useState(formattedFocusTime);
   const [cycle, setCycle] = useState<Cycle>(Cycle.READY);
   const [isRunning, setIsRunning] = useState(false);
+  const timerInterval = useRef<NodeJS.Timeout | null>(null);
 
   const startStop = () => {
     if (cycle === Cycle.READY) {
@@ -19,42 +27,55 @@ const useCountdown = ({ focusTime, breakTime }: IUserCountdownprops) => {
   };
 
   const reset = () => {
-    setTime(focusTime);
+    setTimeLeft(formattedFocusTime);
     setIsRunning(false);
     setCycle(Cycle.READY);
   };
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
     if (isRunning) {
-      if (time === 0) {
+      if (timeLeft.minutes === 0 && timeLeft.seconds === 0) {
         switch (cycle) {
           case Cycle.FOCUS:
             setCycle(Cycle.BREAK);
-            setTime(breakTime);
+            setTimeLeft(formattedBreakTime);
             break;
           case Cycle.BREAK:
             setCycle(Cycle.READY);
-            setTime(focusTime);
+            setTimeLeft(formattedFocusTime);
             setIsRunning(false);
+            break;
+          default:
             break;
         }
       } else {
-        intervalId = setInterval(() => {
-          setTime((prevTime) => prevTime - 1);
+        timerInterval.current = setInterval(() => {
+          setTimeLeft((prevTime) => {
+            if (prevTime.seconds === 0) {
+              return {
+                minutes: prevTime.minutes - 1,
+                seconds: 59,
+              };
+            }
+            return {
+              minutes: prevTime.minutes,
+              seconds: prevTime.seconds - 1,
+            };
+          });
         }, 1000);
       }
     }
 
     return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
+      if (timerInterval.current) {
+        clearInterval(timerInterval.current);
       }
     };
-  }, [isRunning, time, cycle, focusTime, breakTime]);
+  }, [isRunning, timeLeft, cycle, focusTime, breakTime]);
 
-  return { time, isRunning, cycle, startStop, reset };
+  const formattedTimeLeft = getFormattedTimeLeft(timeLeft);
+
+  return { formattedTimeLeft, isRunning, cycle, startStop, reset };
 };
 
 export default useCountdown;
