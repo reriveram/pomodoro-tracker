@@ -1,5 +1,4 @@
-import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Cycle } from "@/components/countdown/utils";
 
 interface IUserCountdownprops {
@@ -12,14 +11,11 @@ const useCountdown = ({ focusTime, breakTime }: IUserCountdownprops) => {
   const [cycle, setCycle] = useState<Cycle>(Cycle.READY);
   const [isRunning, setIsRunning] = useState(false);
 
-  console.log(time);
-  console.log(cycle);
-
   const startStop = () => {
     if (cycle === Cycle.READY) {
       setCycle(Cycle.FOCUS);
     }
-    setIsRunning(!isRunning);
+    setIsRunning((prev) => !prev);
   };
 
   const reset = () => {
@@ -29,37 +25,34 @@ const useCountdown = ({ focusTime, breakTime }: IUserCountdownprops) => {
   };
 
   useEffect(() => {
-    if (time === 0) {
-      if (cycle === Cycle.FOCUS) {
-        setCycle(Cycle.BREAK);
-        setTime(breakTime);
-      } else if (cycle === Cycle.BREAK) {
-        setCycle(Cycle.COMPLETED);
-        setTime(focusTime);
-        setIsRunning(false);
+    let intervalId: NodeJS.Timeout;
+
+    if (isRunning) {
+      if (time === 0) {
+        switch (cycle) {
+          case Cycle.FOCUS:
+            setCycle(Cycle.BREAK);
+            setTime(breakTime);
+            break;
+          case Cycle.BREAK:
+            setCycle(Cycle.READY);
+            setTime(focusTime);
+            setIsRunning(false);
+            break;
+        }
+      } else {
+        intervalId = setInterval(() => {
+          setTime((prevTime) => prevTime - 1);
+        }, 1000);
       }
     }
-    if (isRunning && time > 0) {
-      const interval = setInterval(() => {
-        setTime((prevTime) => prevTime - 1);
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [isRunning, time]);
 
-  useEffect(() => {
-    if (cycle === Cycle.FOCUS) {
-      setIsRunning(true);
-    }
-    if (cycle === Cycle.COMPLETED) {
-      setTime(focusTime);
-      setIsRunning(false);
-      setCycle(Cycle.READY);
-    }
-    if (cycle === Cycle.BREAK) {
-      setIsRunning(true);
-    }
-  }, [cycle]);
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [isRunning, time, cycle, focusTime, breakTime]);
 
   return { time, isRunning, cycle, startStop, reset };
 };

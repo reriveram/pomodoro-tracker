@@ -17,7 +17,6 @@ const Countdown = () => {
       <Text className={`text-white text-8xl font-bold ${getTextColor(cycle)}`}>
         {time}
       </Text>
-
       <Pressable onPress={startStop} className="bg-white p-2 rounded-md">
         <Text className="text-black">{isRunning ? "Pause" : "Start"}</Text>
       </Pressable>
