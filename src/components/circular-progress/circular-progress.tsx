@@ -3,7 +3,7 @@ import React from "react";
 import Svg, { Circle } from "react-native-svg";
 import Animated, {
   useAnimatedProps,
-  withTiming,
+  withSpring,
 } from "react-native-reanimated";
 
 interface ICircularProgressProps {
@@ -15,29 +15,42 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const CircularProgress = ({ progress }: ICircularProgressProps) => {
   const { width } = Dimensions.get("window");
   const size = width - 32;
-  const strokeWidth = 50;
+  const strokeWidth = 10;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
   const animatedProps = useAnimatedProps(() => {
-    const strokeDashoffset = withTiming(circumference * (1 - progress), {
-      duration: 1500,
-      easing: (x) => x, // Linear easing for smooth continuous motion
-    });
-
     return {
-      strokeDashoffset,
+      strokeDashoffset: withSpring(circumference * (1 - progress), {
+        mass: 1,
+        damping: 20,
+        stiffness: 90,
+        overshootClamping: true,
+        restDisplacementThreshold: 0.01,
+        restSpeedThreshold: 0.01,
+      }),
     };
   });
 
   return (
     <Svg width={size} height={size}>
-      <AnimatedCircle
-        stroke="white"
+      <Circle
         cx={size / 2}
         cy={size / 2}
         r={radius}
-        {...{ strokeWidth }}
+        fill="none"
+        stroke="#404040"
+        strokeWidth={strokeWidth}
+        strokeDashoffset={circumference}
+      />
+      <AnimatedCircle
+        stroke="white"
+        fill="none"
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
         strokeDasharray={`${circumference} ${circumference}`}
         strokeDashoffset={circumference}
         animatedProps={animatedProps}
