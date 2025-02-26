@@ -37,6 +37,7 @@ const useCountdown = ({ focusTime, breakTime }: IUserCountdownprops) => {
     setTimeLeft(formattedFocusTime);
     setIsRunning(false);
     setCycle(Cycle.READY);
+    setProgress(0);
   };
 
   useEffect(() => {
