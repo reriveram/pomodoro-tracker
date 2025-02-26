@@ -5,17 +5,20 @@ import Animated, {
   useAnimatedProps,
   withSpring,
 } from "react-native-reanimated";
+import { Cycle } from "@/components/countdown/utils";
+import { getStrokeColor } from "@/components/circular-progress/utils";
 
 interface ICircularProgressProps {
   progress: number;
+  cycle: Cycle;
 }
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-const CircularProgress = ({ progress }: ICircularProgressProps) => {
+const CircularProgress = ({ progress, cycle }: ICircularProgressProps) => {
   const { width } = Dimensions.get("window");
   const size = width - 32;
-  const strokeWidth = 10;
+  const strokeWidth = 15;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
@@ -44,7 +47,7 @@ const CircularProgress = ({ progress }: ICircularProgressProps) => {
         strokeDashoffset={circumference}
       />
       <AnimatedCircle
-        stroke="#CC391B"
+        stroke={getStrokeColor(cycle)}
         fill="none"
         cx={size / 2}
         cy={size / 2}

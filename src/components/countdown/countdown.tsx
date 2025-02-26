@@ -25,7 +25,7 @@ const Countdown = () => {
       <Pressable onPress={reset} className="bg-white p-2 rounded-md">
         <Text className="text-black">Reset</Text>
       </Pressable>
-      <CircularProgress progress={progress} />
+      <CircularProgress progress={progress} cycle={cycle} />
     </View>
   );
 };
