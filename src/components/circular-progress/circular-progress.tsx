@@ -44,7 +44,7 @@ const CircularProgress = ({ progress }: ICircularProgressProps) => {
         strokeDashoffset={circumference}
       />
       <AnimatedCircle
-        stroke="white"
+        stroke="#CC391B"
         fill="none"
         cx={size / 2}
         cy={size / 2}
